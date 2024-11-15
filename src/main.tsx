@@ -4,13 +4,17 @@ import './index.css'
 // import App from './App.tsx'
 import TrustifyLayout from './TrustifyLayout.tsx'
 import TrustifyLogin from './TrustifyLogin.tsx'
+import { BrowserRouter } from 'react-router-dom'
+import App from './App.tsx'
 // import TrustifyLogin from './TrustifyLogin.tsx'
 
 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <TrustifyLayout />
-    {/* <TrustifyLogin /> */}
+    <BrowserRouter>
+    <App></App>
+    </BrowserRouter>
+  
   </StrictMode>,
 )
