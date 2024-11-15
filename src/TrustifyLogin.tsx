@@ -9,13 +9,17 @@ declare global {
     };
   }
 }
+
 import { Saly14, LogoTrustify, Avatar } from './assets/img.ts';
+import { Route } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function TrustifyLogin() {
 
    const [isConnecting, setIsConnecting] = useState(false);
    const [error, setError] = useState(''); // Añadido para manejar errores
-   //const navigate = useNavigate(); // Para navegación después del login
+   const navigate = useNavigate(); // Para navegación después del login
    
 
   const connectWallet = async () => {
@@ -47,6 +51,7 @@ export default function TrustifyLogin() {
       console.log('Address:', accounts[0]);
       console.log('Balance:', balance, 'ETH');
 
+      navigate('/layout'); 
       // Redireccionar al dashboard
       //navigate('/dashboard');
     } catch (error) {
