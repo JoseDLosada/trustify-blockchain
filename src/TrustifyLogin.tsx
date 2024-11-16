@@ -1,81 +1,25 @@
-import  { useState } from 'react';
-
-// Declare the type for window.ethereum
-declare global {
-  interface Window {
-    ethereum?: {
-      isMetaMask?: boolean;
-      request?: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-    };
-  }
-}
 
 import { Saly14, LogoTrustify, Avatar } from './assets/img.ts';
-import { Route } from 'react-router-dom';
+import { useMetaMaskConnection } from './hook/useMetaMaskConnection.tsx';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function TrustifyLogin() {
+  const navigate = useNavigate();
+  const { connectWallet, isConnecting } = useMetaMaskConnection();
 
-   const [isConnecting, setIsConnecting] = useState(false);
-   const [error, setError] = useState(''); // Añadido para manejar errores
-   const navigate = useNavigate(); // Para navegación después del login
-   
-
-  const connectWallet = async () => {
-    setIsConnecting(true);
-    setError('');
-
+  const handleConnect = async () => {
     try {
-      if (!window.ethereum) {
-        throw new Error(
-          'No se encontró una wallet. Por favor, instala MetaMask.'
-        );
+      const { address, balance } = await connectWallet();
+      if (!address) {
+        console.log('No se pudo conectar a la wallet');
       }
-
-      const accounts = (await window.ethereum.request?.({
-        method: 'eth_requestAccounts',
-      })) as string[];
-
-      if (!accounts || accounts.length === 0) {
-        throw new Error('No se encontraron cuentas.');
-      }
-
-      const balance = await getBalance(accounts[0]);
-
-      // Guardar datos del usuario
-      localStorage.setItem('userWallet', accounts[0]);
-      localStorage.setItem('userBalance', balance.toString());
-
-      // Mostrar en la consola
-      console.log('Address:', accounts[0]);
+      console.log('Conectado:', address);
       console.log('Balance:', balance, 'ETH');
-
-      navigate('/layout'); 
-      // Redireccionar al dashboard
-      //navigate('/dashboard');
-    } catch (error) {
-      console.error('Error:', error);
-      setError(error instanceof Error ? error.message : 'Error desconocido');
-    } finally {
-      setIsConnecting(false);
+      navigate('/layout');
+    } catch (err) {
+      console.error('Error al conectar:', err);
     }
   };
-
-  const getBalance = async (address: string): Promise<number> => {
-    if (!window.ethereum) {
-      throw new Error('MetaMask no está instalado');
-    }
-
-    const balance = (await window.ethereum.request?.({
-      method: 'eth_getBalance',
-      params: [address, 'latest'],
-    })) as string;
-
-    return parseFloat(balance) / 1e18;
-  };
-
-
 
   return (
     <main className="min-h-screen bg-white p-6 flex flex-col">
@@ -125,7 +69,7 @@ export default function TrustifyLogin() {
             </figure>
             <button
               className="w-full max-w-sm h-14 md:h-16 flex justify-center items-center bg-[#4D47C3] rounded-lg shadow-lg transition-all hover:bg-[#3d3a9c] focus:outline-none focus:ring-2 focus:ring-[#4D47C3] focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={connectWallet}
+              onClick={handleConnect}
               disabled={isConnecting}
             >
               <span className="text-white text-base md:text-lg font-medium">
