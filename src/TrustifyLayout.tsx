@@ -1,15 +1,30 @@
 import { ProductCards } from './components/ProductCards.tsx';
-import { Avatar } from './assets/img.ts';
+import { Avatar, LogoTrustify } from './assets/img.ts';
+import { useMetaMaskConnection } from './hook/useMetaMaskConnection.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function TrustifyLayout() {
+  const navigate = useNavigate();
+  const { disconnectWallet } = useMetaMaskConnection();
+
+  const handleDisconect = () => {
+    disconnectWallet();
+    navigate('/');
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <header className="fixed top-0 left-0 w-full bg-white shadow-md z-10 transition-all duration-300 ease-in-out">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <span className="text-sky-300 font-bold text-3xl tracking-wide">
+            {/* <span className="text-sky-300 font-bold text-3xl tracking-wide">
               Trustify
-            </span>
+            </span> */}
+            <img
+              src={LogoTrustify}
+              alt="Trustify Logo"
+              className="h-60 w-auto pt-1"
+            />
             <nav className="hidden lg:flex items-center space-x-6">
               <a
                 href="#"
@@ -22,12 +37,6 @@ export default function TrustifyLayout() {
                 className="text-gray-600 hover:text-sky-300 transition-colors duration-200"
               >
                 About Us
-              </a>
-              <a
-                href="#"
-                className="text-gray-600 hover:text-sky-300 transition-colors duration-200"
-              >
-                FAQ
               </a>
             </nav>
           </div>
@@ -42,9 +51,12 @@ export default function TrustifyLayout() {
               </div>
               <div className="flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2">
                 <span className="text-gray-600 text-sm">TRUST:</span>
-                <span className="text-indigo-600 font-semibold text-sm">
+                {/* <span className="text-indigo-600 font-semibold text-sm">
                   100
-                </span>
+                </span> */}
+              <span className="text-indigo-600 font-semibold text-sm">
+                {localStorage.getItem('userBalance')}
+              </span>
               </div>
             </div>
 
@@ -56,9 +68,18 @@ export default function TrustifyLayout() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-gray-800 font-medium hidden sm:inline-block">
+              {/* <span className="text-gray-800 font-medium hidden sm:inline-block">
                 0x3Cd…bF32x
-              </span>
+              </span> */}
+                <span className="text-gray-800 font-medium hidden sm:inline-block">
+                {`${localStorage.getItem('userWallet')?.slice(0, 6)}...${localStorage.getItem('userWallet')?.slice(-4)}`}
+                </span>
+              <button
+                onClick={handleDisconect}
+                className="text-white bg-red-500 hover:bg-red-600 transition-colors duration-200 px-4 py-2 rounded-full shadow-sm hover:shadow-md"
+              >
+                Desconectar
+              </button>
             </div>
 
             <button className="lg:hidden text-gray-600 hover:text-sky-300 transition-colors duration-200">
