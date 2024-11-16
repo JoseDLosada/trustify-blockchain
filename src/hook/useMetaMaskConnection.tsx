@@ -141,7 +141,6 @@ export const useMetaMaskConnection = () => {
     }
   };
 
-  
   // Función para desconectar
   const disconnectWallet = () => {
     // Limpiar estado
