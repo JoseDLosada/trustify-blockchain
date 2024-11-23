@@ -43,7 +43,7 @@ contract Trustify is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ERC20Permit, 
 
     // Función de asignación de status - Grupo 2
 
-    
+
 
     function pause() public onlyOwner {
         _pause();
