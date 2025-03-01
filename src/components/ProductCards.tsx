@@ -82,7 +82,7 @@ export function ProductCards() {
       );
     } catch (error) {
       console.error('Error al llamar al contrato inteligente:', error);
-      // Aquí podrías manejar el error, por ejemplo mostrando una notificación
+      // manejar el errores, por ejemplo mostrando una notificación
     } finally {
       setIsLoading(null);
     }
